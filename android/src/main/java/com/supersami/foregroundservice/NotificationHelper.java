@@ -57,14 +57,21 @@ class NotificationHelper {
         Intent notificationIntent = new Intent(context, mainActivityClass);
         notificationIntent.putExtra("mainOnPress",bundle.getString("mainOnPress"));
         int uniqueInt1 = (int) (System.currentTimeMillis() & 0xfffffff);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, uniqueInt1, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        
+        int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            flags = PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT 
+        }
+        
+        
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, uniqueInt1, notificationIntent, flags);
 
         if(bundle.getBoolean("button", false) == true) {
             Log.d("SuperLog C ", "inButtonOnPress" + bundle.getString("buttonOnPress"));
             Intent notificationBtnIntent = new Intent(context, mainActivityClass);
             notificationBtnIntent.putExtra("buttonOnPress", bundle.getString("buttonOnPress"));
             int uniqueInt = (int) (System.currentTimeMillis() & 0xfffffff);
-            pendingBtnIntent = PendingIntent.getActivity(context, uniqueInt, notificationBtnIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            pendingBtnIntent = PendingIntent.getActivity(context, uniqueInt, notificationBtnIntent, flags);
         }
 
         if(bundle.getBoolean("button2", false) == true) {
@@ -72,7 +79,7 @@ class NotificationHelper {
             Intent notificationBtn2Intent = new Intent(context, mainActivityClass);
             notificationBtn2Intent.putExtra("button2OnPress", bundle.getString("button2OnPress"));
             int uniqueInt2 = (int) (System.currentTimeMillis() & 0xfffffff);
-            pendingBtn2Intent = PendingIntent.getActivity(context, uniqueInt2, notificationBtn2Intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            pendingBtn2Intent = PendingIntent.getActivity(context, uniqueInt2, notificationBtn2Intent, flags);
         }
 
         String title = bundle.getString("title");
